@@ -16,5 +16,14 @@ class main(object):
         self.csvDoc = csvDoc
         # Classes
         R = Reader(csvDoc)
-        R.show_head()
-main('movies.csv')
+        self.df = R.movies
+
+    # Films-per-year and top year film production amount
+    def films_per_year(self):
+        df = self.df['releaseDate']
+        print(df.head())
+        pass
+
+
+exp = main('movies.csv')
+exp.films_per_year()
