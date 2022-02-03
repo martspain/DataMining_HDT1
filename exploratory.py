@@ -29,8 +29,9 @@ class main(object):
         df['releaseDate'] = pd.to_datetime(df['releaseDate'], errors='coerce').dt.year
         # Grouping releaseDate by size, merging it into new "count" column.
         df = df.groupby(df['releaseDate']).size().to_frame('count')
+        # DataFrame is sortered and chopped up
         df = df.sort_values('count', ascending=False).head(25)
-        # DataFrame is sortered, then the top value name it's extracted
+        # Then the top value name it's extracted
         maxYearProd = df.iloc[0].name
         
         print("-------------------------")
@@ -39,7 +40,47 @@ class main(object):
         print(df.head())
 
         ax = df.plot.bar(y='count', use_index=True)
+        plt.title('Movies per Year (1920-2022)')
+        plt.xlabel('Years')
+        plt.ylabel('Amount of Movies')
         plt.show()
 
+    # Top genre for the 20 latest released films and data main genre
+    def main_genre(self):
+        df_all = self.df
+        # Turning releaseDate column into an actual datetime type column
+        df_all['releaseDate'] = pd.to_datetime(df_all['releaseDate'], errors='coerce')
+        # Sorting into the lastest released films and limiting into the last 20
+        df_all = df_all.sort_values('releaseDate', ascending=False)
+        df = df_all.copy().head(20)
+        # genres composition has been splitted
+        df['genres'] = df['genres'].str.split("|")
+        df_all['genres'] = df_all['genres'].str.split("|")
+        # genres are extended and grouped by size. Then sorted again
+        df = df.explode("genres").reset_index(drop=True)
+        df_all = df_all.explode("genres").reset_index(drop=True)
+        df = df.groupby("genres").size().sort_values(ascending=False)
+        df_all = df_all.groupby("genres").size().sort_values(ascending=False)
+
+        print(df)
+        print("--------------------------------")
+        print("Top genre Latest 20 films:",df.idxmax())
+        print("--------------------------------")
+        print(df_all)
+        print("Top genre all-time films:",df_all.idxmax())
+        print("--------------------------------")
+        
+        ax = df.plot.pie(use_index=True)
+        """
+        plt.title('Movies per Year (1920-2021)')
+        plt.xlabel('Years')
+        plt.ylabel('Amount of Movies')
+        """
+        plt.show()
+        ax_2 = df_all.plot.pie(use_index=True)
+        plt.show()
+        
+
 exp = main('movies.csv')
-exp.films_per_year()
+# exp.films_per_year()
+exp.main_genre()
