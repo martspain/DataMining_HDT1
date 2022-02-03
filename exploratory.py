@@ -79,8 +79,26 @@ class main(object):
         plt.show()
         ax_2 = df_all.plot.pie(use_index=True)
         plt.show()
+
+    # Most profitable films by genre
+    def most_profitable_films_by_genre(self):
+        df = self.df
+        df['genres'] = df['genres'].str.split("|").str[0]
+        df = df[['genres', 'revenue']].sort_values('revenue', ascending=False)
+        df = df.groupby(df['genres']).sum().sort_values('revenue', ascending=False)
+        print(df)
         
+        ax = df.plot.bar(use_index=True)
+        """
+        plt.title('Movies per Year (1920-2021)')
+        plt.xlabel('Years')
+        plt.ylabel('Amount of Movies')
+        """
+        plt.show()
+        
+
 
 exp = main('movies.csv')
 # exp.films_per_year()
-exp.main_genre()
+# exp.main_genre()
+exp.most_profitable_films_by_genre()
