@@ -48,7 +48,7 @@ class main(object):
         plt.show()
 
     # Top genre for the 20 latest released films and data main genre
-    def main_genre(self):
+     def main_genre(self):
         df_all = self.df
         # Turning releaseDate column into an actual datetime type column
         df_all['releaseDate'] = pd.to_datetime(df_all['releaseDate'], errors='coerce')
@@ -72,15 +72,18 @@ class main(object):
         print("Top genre all-time films:",df_all.idxmax())
         print("--------------------------------")
         
-        ax = df.plot.pie(use_index=True)
-        """
-        plt.title('Movies per Year (1920-2021)')
-        plt.xlabel('Years')
+        ax = df.plot.bar(use_index=True)
+      
+        plt.title('Lastest 20 Films Genres')
+        plt.xlabel('Genres')
         plt.ylabel('Amount of Movies')
-        """
         plt.show()
-        ax_2 = df_all.plot.pie(use_index=True)
+        ax_2 = df_all.plot.bar(use_index=True)
+        plt.title('Amount of Films per Genre')
+        plt.xlabel('Genres')
+        plt.ylabel('Amount of Movies')
         plt.show()
+
 
     # Most profitable films by genre
     def most_profitable_films_by_genre(self):
