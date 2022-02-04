@@ -48,7 +48,7 @@ class main(object):
         plt.show()
 
     # Top genre for the 20 latest released films and data main genre
-     def main_genre(self):
+    def main_genre(self):
         df_all = self.df
         # Turning releaseDate column into an actual datetime type column
         df_all['releaseDate'] = pd.to_datetime(df_all['releaseDate'], errors='coerce')
@@ -208,7 +208,13 @@ class main(object):
     # month vs revenue
     def month_vs_revenue(self):
         df = self.df
-        print(pd.to_datetime(df.releaseDate))
+        df['releaseDate'] = pd.to_datetime(df['releaseDate'], errors='coerce').dt.month
+        df = df.groupby(['releaseDate'])['revenue'].sum()
+        # Movies with more actors
+        print('-----------------------')
+        print('Total revenue per Month')
+        print('-----------------------')
+        print(df)
 
     # frequency table of categorical variables
     def frequecy_table(self):
@@ -267,12 +273,16 @@ class main(object):
         df = self.df
         df = df[['castWomenAmount','castMenAmount', 'popularity']].sort_values('popularity', ascending=False).head(5)
         print(df)
-
-
-
-
     
+    # vote count vs revenue
+    def votes_vs_revenue_correlation(self):
+        df = self.df
+        plt.title('Scatter Plot of Vote Count Correlation with Revenue ')
+        sns.set_style('white')
+        sns.set_style('ticks')
 
+        sns.regplot(x='voteCount', y='revenue', data = df)
+        plt.show()
 
 
 exp = main('movies.csv')
@@ -285,4 +295,5 @@ exp = main('movies.csv')
 # exp.ten_movies_with_more_revenue()
 # exp.most_voted_movie()
 # exp.actors_quantity()
-exp.genre_influence_in_income()
+# exp.genre_influence_in_income()
+exp.votes_vs_revenue_correlation()
