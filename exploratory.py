@@ -2,7 +2,7 @@
 # Mineria de Datos
 # HDT1-Exploratory Analysis
 #------------------------------------
-# Sofia Rueda    19xxx
+# Sofia Rueda    19099
 # Martin Espana  19xxx
 # Oliver de Leon 19270
 
@@ -95,10 +95,52 @@ class main(object):
         plt.ylabel('Amount of Movies')
         """
         plt.show()
-        
+    
+    # worst movie according to the votes of all users
+    def worst_movie(self):
+        df = self.df
+        df = df[['title', 'voteCount']].sort_values('voteCount', ascending=True).head(1)
+
+        print(df)
+    
+    # months with the highest grossing releases 
+    def months_highest_grossing_releases(self):
+        df = self.df
+        df['releaseDate'] = pd.to_datetime(df['releaseDate'], errors='coerce').dt.month 
+        df = df.groupby(['releaseDate'])['revenue'].count()
+
+        print(df)
+
+        ax = df.plot.bar(y='count', use_index=True)
+        plt.title('Highest grossing releases per month')
+        plt.xlabel('Months')
+        plt.ylabel('Amount of Movies')
+        plt.show()
+
+    # main genre with the longest films
+
+    def main_genre_longest_films(self):
+        df = self.df
+        df['genres'] = df['genres'].str.split("|").str[0]
+
+        df = df[['genres', 'runtime']].sort_values('runtime', ascending=False)
+        df = df.groupby(df['genres']).sum().sort_values('runtime', ascending=False)
+
+        print(df)
+
+        ax = df.plot.bar(use_index=True)
+        plt.title('Total runtime per genre')
+        plt.xlabel('Genre')
+        plt.ylabel('Total runtime')
+        plt.show()
+
+    # popularity and income of films influenced by the number of men and women in the cast 
+    # popularity, revenue, castWomenAmount, castMenAmount
+    
+
 
 
 exp = main('movies.csv')
 # exp.films_per_year()
 # exp.main_genre()
-exp.most_profitable_films_by_genre()
+exp.main_genre_longest_films()
