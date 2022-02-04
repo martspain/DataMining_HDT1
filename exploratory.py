@@ -3,7 +3,7 @@
 # HDT1-Exploratory Analysis
 #------------------------------------
 # Sofia Rueda    19099
-# Martin Espana  19xxx
+# Martin Espana  19258
 # Oliver de Leon 19270
 
 import datetime
@@ -147,6 +147,64 @@ class main(object):
 
     # popularity and income of films influenced by the number of men and women in the cast 
     # popularity, revenue, castWomenAmount, castMenAmount
+
+    # Top 10 Movies with more budget
+    def ten_movies_with_more_budget(self):
+        df = self.df
+        print("--------------------------------")
+        print('Top 10 Movies\' budgets')
+        print("--------------------------------")
+        print(df[['title','budget']].sort_values('budget', ascending=False).head(10))
+    
+    # Top 10 Movies with more budget
+    def ten_movies_with_more_revenue(self):
+        df = self.df
+        print("--------------------------------")
+        print('Top 10 Movies\' revenue')
+        print("--------------------------------")
+        print(df[['title','revenue']].sort_values('revenue', ascending=False).head(10))
+    
+    # Most voted movie
+    def most_voted_movie(self):
+        df = self.df
+        print("--------------------------------")
+        print('Most voted Movie')
+        print("--------------------------------")
+        print(df[['title', 'voteCount']].sort_values('voteCount', ascending=False).head(1))
+
+    # Actors per movie
+    def actors_quantity(self):
+        # Actors per movie
+        df = self.df
+        secondDf = self.df
+        df['actors'] = df['actors'].str.split("|")
+        df = df.explode('actors').reset_index(drop=True)
+        df['actors'].drop_duplicates()
+        df = df[['actors']].groupby(df['title']).count().sort_values('actors', ascending=False)
+
+        # Movies with more actors
+        print('-----------------------')
+        print('Top 10 movies with more actors')
+        print('-----------------------')
+        print(df.head(10))
+
+        # Movies with less actors
+        print('-----------------------')
+        print('Top 10 movies with less actors')
+        print('-----------------------')
+        print(df.tail(10))
+
+        # Movies with less revenue
+        print("--------------------------------")
+        print('Top 10 movies with less revenue')
+        print("--------------------------------")
+        print(secondDf[['title','revenue']].sort_values(['revenue', ], ascending=False).tail(10))
+
+    # month vs revenue
+    def month_vs_revenue(self):
+        df = self.df
+        print(pd.to_datetime(df.releaseDate))
+
     
 
 
@@ -155,5 +213,10 @@ exp = main('movies.csv')
 # exp.films_per_year()
 # exp.main_genre()
 # exp.most_profitable_films_by_genre()
-exp.directors_BestTop20()
+# exp.directors_BestTop20()
 # exp.main_genre_longest_films()
+# exp.ten_movies_with_more_budget()
+# exp.ten_movies_with_more_revenue()
+# exp.most_voted_movie()
+# exp.actors_quantity()
+exp.month_vs_revenue()
