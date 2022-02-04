@@ -83,18 +83,17 @@ class main(object):
     # Most profitable films by genre
     def most_profitable_films_by_genre(self):
         df = self.df
+        # Main genre is selected
         df['genres'] = df['genres'].str.split("|").str[0]
+        # Profit per genre's been sorted
         df = df[['genres', 'revenue']].sort_values('revenue', ascending=False)
+        # Total revenue per genre
         df = df.groupby(df['genres']).sum().sort_values('revenue', ascending=False)
         print(df)
         
-        ax = df.plot.bar(use_index=True)
-        """
-        plt.title('Movies per Year (1920-2021)')
-        plt.xlabel('Years')
-        plt.ylabel('Amount of Movies')
-        """
-        plt.show()
+        print("--------------------------------")
+        print("Top main genre Revenue:",df.idxmax())
+        print("--------------------------------")
     
     # worst movie according to the votes of all users
     def worst_movie(self):
@@ -143,4 +142,5 @@ class main(object):
 exp = main('movies.csv')
 # exp.films_per_year()
 # exp.main_genre()
-exp.main_genre_longest_films()
+exp.most_profitable_films_by_genre()
+# exp.main_genre_longest_films()
