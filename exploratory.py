@@ -95,6 +95,18 @@ class main(object):
         print("Top main genre Revenue:",df.idxmax())
         print("--------------------------------")
     
+    # Directors from the Top20 best voted films
+    def directors_BestTop20(self):
+        df = self.df
+        # Main genre is selected
+        df = df.sort_values('voteCount', ascending=False).head(20)
+        df['director'] = df['director'].str.split("|")
+        df = df.explode("director").reset_index(drop=True)
+        # Profit per genre's been sorted
+        # Total revenue per genre
+        print(df['director'].drop_duplicates())
+        
+
     # worst movie according to the votes of all users
     def worst_movie(self):
         df = self.df
@@ -142,5 +154,6 @@ class main(object):
 exp = main('movies.csv')
 # exp.films_per_year()
 # exp.main_genre()
-exp.most_profitable_films_by_genre()
+# exp.most_profitable_films_by_genre()
+exp.directors_BestTop20()
 # exp.main_genre_longest_films()
