@@ -10,7 +10,9 @@ import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from reader import reader as Reader
+
 
 
 class main(object):
@@ -205,6 +207,67 @@ class main(object):
         df = self.df
         print(pd.to_datetime(df.releaseDate))
 
+    # frequency table of categorical variables
+    def frequecy_table(self):
+        df = self.df
+
+        categorial_variables = ['originalTitle', 'originalLanguage', 'title', 'homePage', 'video', 'director', 'genres', 'productionCompany', 'productionCompanyCountry', 'productionCountry', 'releaseDate', 'actors', 'actorsCharacter']
+    
+        df = pd.value_counts(df['actorsCharacter'])
+
+        df = pd.DataFrame(df)
+        df.columns = ['Frequency']
+
+        # porcentage of relative frequency 
+        df['Relative Frequency %'] = 100 * df['Frequency'] / len(df)
+
+        # cumulative relative frequency
+        
+        cumulative = [ ]
+        cumulative_value = 0
+
+        for i in df['Relative Frequency %'].values:
+            cumulative_value = cumulative_value + i
+            cumulative.append(cumulative_value)
+
+        df['Cumulative Frequency %'] = cumulative
+
+        print(df)
+
+    # normal distribution in quantitative variables
+    def histogram_quantitative_variables(self):
+        df = self.df
+        df = df.sort_values('castMenAmount', ascending=False)
+        plt.hist(df['castMenAmount'])
+        plt.title('Histogram of Male Actors')
+        plt.ylabel('Count')
+        plt.show()
+
+    # budgets correlation with movies revenue
+    def budgets_correlation_with_revenue(self):
+        df = self.df
+
+        plt.title('Scatter Plot of Budgets Correlation with Movies Revenue ')
+        sns.set_style('white')
+        sns.set_style('ticks')
+
+        sns.regplot(x='budget', y='revenue', data = df)
+        plt.show()
+
+    #  men and women cast influence in the popularity and income of films
+    def genre_influence_in_income(self):
+        df = self.df
+        df = df[['castWomenAmount','castMenAmount', 'revenue']].sort_values('revenue', ascending=False).head(5)
+        print(df)
+
+    def genre_influence_in_popularity(self):
+        df = self.df
+        df = df[['castWomenAmount','castMenAmount', 'popularity']].sort_values('popularity', ascending=False).head(5)
+        print(df)
+
+
+
+
     
 
 
@@ -219,4 +282,4 @@ exp = main('movies.csv')
 # exp.ten_movies_with_more_revenue()
 # exp.most_voted_movie()
 # exp.actors_quantity()
-exp.month_vs_revenue()
+exp.genre_influence_in_income()
